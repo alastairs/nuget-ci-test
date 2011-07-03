@@ -50,11 +50,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <ToolsPath>$(ProjectDir)..\..\tools\</ToolsPath>
+    <NuGet>$(ToolsPath)NuGet.exe</NuGet>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets.-->
   <Target Name="BeforeBuild">
+    <!-- Gets the packages for the project from NuGet. Doesn't modify VS projects, etc., just downloads stuff. -->
+    <Message Condition="Exists('$(ProjectDir)packages.config')" Text="Updating NuGet packages..." />
+    <Exec Command="&quot;$(NuGet)&quot; install &quot;$(ProjectDir)packages.config&quot; -o &quot;$(SolutionDir)Packages&quot;" Condition="Exists('$(ProjectDir)packages.config')" />
   </Target>
-  <Target Name="AfterBuild">
+  <!--<Target Name="AfterBuild">
   </Target>
   -->
 </Project>
